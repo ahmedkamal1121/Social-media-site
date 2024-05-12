@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <script src="node_modules/axios/dist/axios.min.js"></script>
+    <style>
+      body {
+        background-color: #f0efeff9;
+      }
+
+      #add-btn-1 {
+        background-color: rgb(5, 61, 61);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        position: fixed;
+        bottom: 10%;
+        right: 10%;
+        color: white;
+        font-size: 37px;
+        text-align: center;
+        line-height: 40px;
+        padding: 3px;
+        cursor: pointer;
+      }
+      /* <!-- =====================loder --> */
+      .lds-ellipsis {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-ellipsis div {
+        position: absolute;
+        top: 33px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: #ffffff;
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+      }
+      .lds-ellipsis div:nth-child(1) {
+        left: 8px;
+        animation: lds-ellipsis1 0.6s infinite;
+      }
+      .lds-ellipsis div:nth-child(2) {
+        left: 8px;
+        animation: lds-ellipsis2 0.6s infinite;
+      }
+      .lds-ellipsis div:nth-child(3) {
+        left: 32px;
+        animation: lds-ellipsis2 0.6s infinite;
+      }
+      .lds-ellipsis div:nth-child(4) {
+        left: 56px;
+        animation: lds-ellipsis3 0.6s infinite;
+      }
+      @keyframes lds-ellipsis1 {
+        0% {
+          transform: scale(0);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes lds-ellipsis3 {
+        0% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(0);
+        }
+      }
+      @keyframes lds-ellipsis2 {
+        0% {
+          transform: translate(0, 0);
+        }
+        100% {
+          transform: translate(24px, 0);
+        }
+      }
+
+      /* <!-- ============================ --> */
+    </style>
+  </head>
+  <body>
+    <!-- =====================loder -->
+    <div
+      id="loder"
+      style="
+        background-color: rgba(128, 128, 128, 0.476);
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+        width: 90px;
+        height: 60px;
+        margin: auto;
+        border-radius: 150px;
+        visibility: hidden;
+      "
+    >
+      <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <!-- ============================ -->
+    <!--Model login -->
+    <div
+      class="modal fade"
+      id="log-in-m"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label"
+                  >Username:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="Username"
+                  value="ahmed212"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label"
+                  >password:</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  value="123123"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              onclick="loginCliked()"
+            >
+              login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- register -->
+    <div
+      class="modal fade"
+      id="reg-m"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Register</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <input type="file" class="form-control" id="user-img" />
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Name:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="register-name"
+                  value="ahmed212"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label"
+                  >Username:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="register-Username"
+                  value="ahmed212"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="message-text" class="col-form-label"
+                  >password:</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="register-password"
+                  value="123123"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-success" onclick="register()">
+              register
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- add model post -->
+    <div
+      class="modal fade"
+      id="add-m"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="title-model">Create Post</h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label"
+                  >Title:</label
+                >
+                <input type="text" class="form-control" id="title-post" />
+
+                <input type="hidden" id="post-id" value="" />
+              </div>
+              <textarea
+                name=""
+                id="body-post"
+                style="width: 100%; height: 100px"
+              ></textarea>
+              <input type="file" class="form-control" id="img-post" />
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              id="btn-model"
+              onclick="createPost()"
+            >
+              Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- add=========btn  -->
+
+    <!-- delete model post -->
+    <div
+      class="modal fade"
+      id="delete"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="title-model">
+              Are you sure to delete ?
+            </h1>
+            <input type="hidden" id="hedinp" />
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              id="btn-model"
+              onclick="deletePost()"
+            >
+              Yes,Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- delete=========btn  -->
+    <div class="bg-primery" id="add-btn-1" onclick="addbtnclick()">+</div>
+    <!--  -->
+
+    <!-- alert======= -->
+    <div
+      id="newalert"
+      style="z-index: 9999999; position: fixed; width: 40%; bottom: 0; right: 0"
+    ></div>
+    <!-- alert======= -->
+
+    <!-- ========================================================= -->
+    <!-- nav -->
+    <div class="container d-flex" style="justify-content: center">
+      <div class="col-9">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow rounded">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">MD</a>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    aria-current="page"
+                    href="index.html"
+                    >Home</a
+                  >
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    onclick="showmyprofile()"
+                    style="cursor: pointer"
+                    >profile</a
+                  >
+                </li>
+              </ul>
+              <div
+                class="d-flex w-100"
+                style="justify-content: right"
+                id="login-div"
+              >
+                <button
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#log-in-m"
+                  data-bs-whatever="@mdo"
+                  class="btn btn-outline-success mx-3"
+                >
+                  Login
+                </button>
+                <button
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#reg-m"
+                  class="btn btn-outline-success"
+                >
+                  Regester
+                </button>
+              </div>
+
+              <!--out  -->
+              <div
+                class="d-flex w-100"
+                style="justify-content: right"
+                id="logout-div"
+              >
+                <img
+                  id="profile-img"
+                  src=""
+                  alt="img"
+                  style="width: 40px; height: 40px; border-radius: 50%"
+                />
+                <span
+                  id="profile-name"
+                  style="display: block; height: 40px; line-height: 40px"
+                  >@ahmed</span
+                >
+                <button
+                  onclick="logout()"
+                  type="button"
+                  data-bs-toggle="modal"
+                  class="btn btn-outline-danger mx-3"
+                >
+                  Logout
+                </button>
+              </div>
+              <!-- out -->
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+    <!-- nav -->
+
+    <!-- body -->
+    <div
+      class="container d-flex"
+      style="height: 1000px; justify-content: center"
+    >
+      <div class="col-9">
+        <div class="posts mt-5">
+          <div class="post shadow my-3">
+            <div
+              class="row"
+              style="
+                height: 150px;
+                background-color: rgb(248, 249, 250);
+                display: flex;
+                flex-wrap: nowrap;
+              "
+              id="cont"
+            >
+              <div class="" style="flex: 1">
+                <img
+                  id="img-info"
+                  src="img/images.png"
+                  alt=".."
+                  style="height: 120px; border-radius: 50%; padding: 5px"
+                />
+              </div>
+              <div
+                class="d-flex"
+                style="
+                  flex-direction: column;
+                  justify-content: space-evenly;
+                  flex: 2;
+                "
+              >
+                <div style="font-weight: 500; font-size: 16px" id="name-info">
+                  Ahmed M2
+                </div>
+                <div
+                  style="font-weight: 500; font-size: 16px"
+                  id="username-info"
+                >
+                  @_7meed
+                </div>
+                <div style="font-weight: 500; font-size: 16px" id="email-info">
+                  am7meed@emai.com
+                </div>
+              </div>
+              <div
+                class="d-flex"
+                style="
+                  flex-direction: column;
+                  justify-content: space-evenly;
+                  flex: 3;
+                "
+              >
+                <div style="color: rgb(172, 172, 172)">
+                  <span id="post-info" style="font-size: 40px; color: black"
+                    >13</span
+                  >post
+                </div>
+                <div style="color: rgb(172, 172, 172)">
+                  <span id="com-info" style="font-size: 40px; color: black"
+                    >20</span
+                  >comments
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- TITLE -->
+        <div class="mt-5">
+          <h1 style="font-weight: 50px">
+            <span id="tit-info">AHMED's </span> post
+          </h1>
+        </div>
+        <!--  -->
+
+        <!--posts  -->
+        <div class="mt-5" id="posttt">
+          <!--post  -->
+          <div class="card">
+            <div class="card-header">
+              <img
+                class="rounded-circle"
+                src="img/images.png"
+                alt=""
+                style="width: 40px; height: 40px"
+              />
+              <span> @_7meed</span>
+
+              <button
+                style="float: right"
+                type="button"
+                class="btn btn-outline-secondary"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-pen"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"
+                  />
+                </svg>
+              </button>
+
+              <button
+                style="float: right; margin-right: 5px"
+                type="button"
+                class="btn btn-outline-danger"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-trash3-fill"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">Special title treatment</h5>
+              <p class="card-text">
+                With supporting text below as a natural lead-in to additional
+                content.
+              </p>
+              <img
+                src="img/pexels-ebeddddddddddddddddger-1624496.jpg"
+                style="width: 100%; height: 400px"
+                alt=""
+              />
+              <span>2 min ago </span>
+
+              <hr />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-pen"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"
+                />
+              </svg>
+              <span>(3) Coments</span>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+        <!--  -->
+      </div>
+    </div>
+
+    <!-- body -->
+  </body>
+  <script src="script.js"></script>
+  <script src="profule.js"></script>
+</html>
